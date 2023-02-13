@@ -1,6 +1,6 @@
-package com.capstone.auth.config;
+package com.capstone.payment.config;
 
-import com.capstone.auth.filter.JwtFilter;
+import com.capstone.payment.filter.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +22,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .and()
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/v1/auth/**")
-                .permitAll()
+                .requestMatchers("/v1/**").permitAll()
+//                .requestMatchers("/v1/addRoom").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -40,4 +38,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
