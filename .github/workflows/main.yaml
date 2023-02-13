@@ -49,8 +49,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: ./auth-service/Dockerfile
+          context: ./auth-service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/auth-service:latest
 
