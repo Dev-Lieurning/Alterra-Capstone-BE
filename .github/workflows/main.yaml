@@ -34,8 +34,8 @@ jobs:
           arguments: build
           build-root-directory: auth-service
         
-      - name: Build jar
-        run: gradle bootJar
+      # - name: Build jar
+      #   run: gradle bootJar
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
