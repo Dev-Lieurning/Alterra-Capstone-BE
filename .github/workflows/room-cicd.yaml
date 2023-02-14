@@ -26,17 +26,14 @@ jobs:
           cache: gradle
 
       - name: Grant execute permission for gradlew
-        run: chmod +x ./auth-service/gradlew
+        run: chmod +x ./room-service/gradlew
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
-          build-root-directory: auth-service
+          build-root-directory: room-service
         
-      # - name: Build jar
-      #   run: gradle bootJar
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -49,9 +46,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: ./auth-service
+          context: ./room-service
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/auth-service:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/room-service:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,12 +57,12 @@ jobs:
       - name: Docker
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.AWS_HOST1 }}
+          host: ${{ secrets.AWS_HOST2 }}
           username: ${{ secrets.AWS_USERNAME }}
           key: ${{ secrets.AWS_KEY }}
           port: ${{ secrets.AWS_PORT }}
           script: |
-            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/auth-service:latest
-            sudo docker stop auth-service
-            sudo docker rm auth-service
-            sudo docker run -d -p 8080:8080 --name auth-service ${{ secrets.DOCKERHUB_USERNAME }}/auth-service:latest
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/room-service:latest
+            sudo docker stop room-service
+            sudo docker rm room-service
+            sudo docker run -d -p 8081:8081 --name room-service ${{ secrets.DOCKERHUB_USERNAME }}/room-service:latest
