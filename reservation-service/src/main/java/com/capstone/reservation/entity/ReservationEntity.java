@@ -28,8 +28,8 @@ public class ReservationEntity {
     @Column(nullable = true)
     private int number_of_persons;
     private Double total_price;
-
     private LocalDateTime check_in;
     private LocalDateTime check_out;
+    private LocalDateTime order_date;
     private String status;
 }

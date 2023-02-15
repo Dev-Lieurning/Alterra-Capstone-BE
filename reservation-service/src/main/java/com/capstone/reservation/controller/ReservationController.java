@@ -48,6 +48,16 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/orderUser/{userId}")
+    public ResponseEntity<ResponseDto> getReservationByUserId(@PathVariable("userId") int id) {
+        try {
+            return new ResponseEntity<>(new ResponseDto(200, "Successfully get reservation by user", new ArrayList<>()), HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ResponseEntity<>(new ResponseDto(403, "Data no exist!!", new ArrayList<>()), HttpStatus.FORBIDDEN);
+        }
+    }
+
     @PostMapping("/addReservation")
     public ResponseEntity<ResponseDto> addReservation(@RequestBody ReservationEntity reservation) {
         try {
