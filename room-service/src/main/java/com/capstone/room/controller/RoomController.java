@@ -41,7 +41,7 @@ public class RoomController {
     @GetMapping(path = "/getRoom/{roomId}")
     public ResponseEntity<ResponseDto> getRoomById(@PathVariable("roomId") int id) {
         try {
-            RoomEntity room = roomService.getRoomById(id);
+            ResponseRoom room = roomService.getRoomById(id);
             ResponseEntity<ResponseDto> response = new ResponseEntity<>(new ResponseDto(200, "Successfully get Data Room", room), HttpStatus.OK);
             return response;
         } catch (Exception e) {

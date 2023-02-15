@@ -61,8 +61,18 @@ public class RoomService {
         return responseRooms;
     }
 
-    public RoomEntity getRoomById(Integer id) {
-        RoomEntity room = roomRepository.findById(id).get();
+    public ResponseRoom getRoomById(Integer id) {
+        RoomEntity roomData = roomRepository.findById(id).get();
+        ResponseRoom room = ResponseRoom.builder()
+                                .id(roomData.getId())
+                                .name(roomData.getName())
+                                .type(roomData.getType())
+                                .price(roomData.getPrice())
+                                .location(roomData.getLocation())
+                                .max_guest(roomData.getMax_guest())
+                                .description(roomData.getDescription())
+                                .image(roomImageRepository.findByIdRoom(roomData.getId()))
+                                .build();
         return room;
     }
 
