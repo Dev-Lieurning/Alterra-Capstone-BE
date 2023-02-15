@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.util.IOUtils;
 import com.capstone.room.entity.ResponseMessage;
+import com.capstone.room.entity.ResponseRoom;
 import com.capstone.room.entity.RoomEntity;
 import com.capstone.room.entity.RoomImageEntity;
 import com.capstone.room.repository.RoomImageRepository;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,9 +42,23 @@ public class RoomService {
     private String bucket;
     @Value("${regionAws}")
     private String region;
-    public List<RoomEntity> getAllRooms() {
+    public List<ResponseRoom> getAllRooms() {
+        List<ResponseRoom> responseRooms = new ArrayList<>();
         List<RoomEntity> roomList = roomRepository.findAll();
-        return roomList;
+        for(RoomEntity room : roomList) {
+            responseRooms.add(ResponseRoom.builder()
+                            .id(room.getId())
+                            .name(room.getName())
+                            .type(room.getType())
+                            .price(room.getPrice())
+                            .location(room.getLocation())
+                            .max_guest(room.getMax_guest())
+                            .description(room.getDescription())
+                            .image(roomImageRepository.findByIdRoom(room.getId()))
+                            .build());
+        }
+
+        return responseRooms;
     }
 
     public RoomEntity getRoomById(Integer id) {
@@ -70,8 +86,9 @@ public class RoomService {
         return image;
     }
 
-    public void uploadFileToS3(List<MultipartFile> files, int idRoom) {
+    public List<RoomImageEntity> uploadFileToS3(List<MultipartFile> files, int idRoom) {
         try{
+            List<RoomImageEntity> response = new ArrayList<>();
             for(MultipartFile file : files){
                 File modifiedFile = new File(file.getOriginalFilename());
                 FileOutputStream os = new FileOutputStream(modifiedFile);
@@ -83,14 +100,18 @@ public class RoomService {
                                             .id_room(idRoom)
                                             .fileName(filename)
                                             .type_data(file.getContentType())
-                                            .link("https://"+bucket+".s3."+region+".amazonaws.com/"+filename.replace(" ","+"))
+                                            .link(amazonS3.getUrl(bucket, filename).toString())
                                             .build();
-                roomImageRepository.save(roomImage);
+                RoomImageEntity saveImage = roomImageRepository.save(roomImage);
+                response.add(saveImage);
                 os.close();
                 modifiedFile.delete();
             }
+            return response;
         } catch (IOException e) {
+            System.out.println("error wey");
             System.out.println(e);
+            return new ArrayList<>();
         }
 
     }

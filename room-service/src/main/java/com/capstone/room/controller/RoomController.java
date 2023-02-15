@@ -1,14 +1,12 @@
 package com.capstone.room.controller;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.*;
-import com.amazonaws.util.IOUtils;
 import com.capstone.room.dto.RequestRoomDto;
 import com.capstone.room.dto.ResponseDto;
 import com.capstone.room.entity.ResponseMessage;
+import com.capstone.room.entity.ResponseRoom;
 import com.capstone.room.entity.RoomEntity;
 import com.capstone.room.entity.RoomImageEntity;
-import com.capstone.room.repository.RoomImageRepository;
 import com.capstone.room.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -16,12 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.print.attribute.standard.Media;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +23,10 @@ public class RoomController {
     @Autowired
     RoomService roomService;
 
-    @Autowired
-    private AmazonS3 amazonS3;
-
     @GetMapping("/getAllRooms")
     public ResponseEntity<ResponseDto> getAllRooms() {
         try {
-            List<RoomEntity> allRooms = roomService.getAllRooms();
+            List<ResponseRoom> allRooms = roomService.getAllRooms();
             if(allRooms.size() < 1) {
                 throw new Exception();
             } else {
@@ -71,10 +60,39 @@ public class RoomController {
                                 .max_guest(requestRoom.getMax_guest())
                                 .description(requestRoom.getDescription())
                                 .build();
-            RoomEntity response = roomService.addRoom(room);
-            roomService.uploadFileToS3(requestRoom.getFiles(), response.getId());
+
+            RoomEntity saveRoom = roomService.addRoom(room);
+            ResponseRoom response;
+            if(requestRoom.getFiles().size() <  1) {
+
+                response = ResponseRoom.builder()
+                        .id(saveRoom.getId())
+                        .name(saveRoom.getName())
+                        .type(saveRoom.getType())
+                        .price(saveRoom.getPrice())
+                        .location(saveRoom.getLocation())
+                        .max_guest(saveRoom.getMax_guest())
+                        .description(saveRoom.getDescription())
+                        .image(new ArrayList<>())
+                        .build();
+            } else {
+                List<RoomImageEntity> saveImages = roomService.uploadFileToS3(requestRoom.getFiles(), saveRoom.getId());
+
+                response = ResponseRoom.builder()
+                        .id(saveRoom.getId())
+                        .name(saveRoom.getName())
+                        .type(saveRoom.getType())
+                        .price(saveRoom.getPrice())
+                        .location(saveRoom.getLocation())
+                        .max_guest(saveRoom.getMax_guest())
+                        .description(saveRoom.getDescription())
+                        .image(saveImages)
+                        .build();
+            }
+
             return new ResponseEntity<>(new ResponseDto(200, "Successfully add Room", response), HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e);
             return new ResponseEntity<>(new ResponseDto(403, "Failed add Room", new ArrayList<>()), HttpStatus.FORBIDDEN);
         }
     }
