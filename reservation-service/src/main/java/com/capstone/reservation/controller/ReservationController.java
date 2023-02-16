@@ -2,6 +2,7 @@ package com.capstone.reservation.controller;
 
 import com.capstone.reservation.dto.ResponseDto;
 import com.capstone.reservation.entity.ReservationEntity;
+import com.capstone.reservation.entity.ReservationUser;
 import com.capstone.reservation.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,9 @@ public class ReservationController {
     @GetMapping("/orderUser/{userId}")
     public ResponseEntity<ResponseDto> getReservationByUserId(@PathVariable("userId") int id) {
         try {
-            return new ResponseEntity<>(new ResponseDto(200, "Successfully get reservation by user", new ArrayList<>()), HttpStatus.OK);
+            System.out.println(id);
+            List<ReservationUser> test = reservationService.getReservationByUserId(id);
+            return new ResponseEntity<>(new ResponseDto(200, "Successfully get reservation by user", test), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);
             return new ResponseEntity<>(new ResponseDto(403, "Data no exist!!", new ArrayList<>()), HttpStatus.FORBIDDEN);
@@ -65,6 +69,7 @@ public class ReservationController {
             ResponseDto response = new ResponseDto(200, "Successfully add reservation!!", addReservation);
             return new ResponseEntity<>(response,HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println(e);
             return new ResponseEntity<>(new ResponseDto(403, "Failed add Reservation!", new ArrayList<>()), HttpStatus.FORBIDDEN);
         }
     }

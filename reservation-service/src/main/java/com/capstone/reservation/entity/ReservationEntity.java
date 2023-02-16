@@ -1,15 +1,14 @@
 package com.capstone.reservation.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 
 @Data
 @Builder
@@ -28,8 +27,11 @@ public class ReservationEntity {
     @Column(nullable = true)
     private int number_of_persons;
     private Double total_price;
-    private LocalDateTime check_in;
-    private LocalDateTime check_out;
-    private LocalDateTime order_date;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING, timezone = "Asia/Jakarta")
+    private Timestamp check_in;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", shape = JsonFormat.Shape.STRING, timezone = "Asia/Jakarta")
+    private Timestamp check_out;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING, timezone = "Asia/Jakarta")
+    private Timestamp order_date = new Timestamp(System.currentTimeMillis());
     private String status;
 }
