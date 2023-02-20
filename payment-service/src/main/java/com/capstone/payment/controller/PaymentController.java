@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1")
 public class PaymentController {
-    @Autowired
+    @Autowired()
     PaymentService paymentService;
 
     @PostMapping("/checkout")

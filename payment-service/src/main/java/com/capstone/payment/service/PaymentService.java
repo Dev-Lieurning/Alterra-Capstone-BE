@@ -23,11 +23,12 @@ import java.util.Map;
 @Service
 public class PaymentService {
 
-    @Autowired(required = false)
+    @Autowired()
     PaymentRepository paymentRepository;
 
     @Value("${XenditKey}")
     private String xenditKey;
+
     public Invoice checkout(PaymentEntity payment) {
         try {
             List<PaymentEntity> listPayment = paymentRepository.findByIdReservation(payment.getId_reservation());
@@ -71,31 +72,8 @@ public class PaymentService {
     }
 
     public List<PaymentEntity> getAllPayments() {
-        try {
-            Xendit.Opt.setApiKey(xenditKey);
-            Map<String, String> channelProperties = new HashMap<>();
-            Map<String, Object> metadata = new HashMap<>();
-            metadata.put("id_user", 1);
-            channelProperties.put("success_redirect_url", "https://yourwebsite.com/order/123");
-
-            Map<String, Object> params = new HashMap<>();
-            params.put("reference_id", "test-reference-id");
-            params.put("currency", "IDR");
-            params.put("amount", 50000);
-            params.put("checkout_method", "ONE_TIME_PAYMENT");
-            params.put("channel_code", "ID_SHOPEEPAY");
-            params.put("channel_properties", channelProperties);
-            params.put("metadata", metadata);
-
-            EWalletCharge charge = EWalletCharge.createEWalletCharge(params);
-            System.out.println(charge.getId());
-
             List<PaymentEntity> paymentList = paymentRepository.findAll();
             return paymentList;
-        } catch (XenditException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
     }
 
     public PaymentEntity getPaymentById(Integer id) {
