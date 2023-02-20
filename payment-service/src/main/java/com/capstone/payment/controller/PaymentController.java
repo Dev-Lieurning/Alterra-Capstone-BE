@@ -37,7 +37,7 @@ public class PaymentController {
     @GetMapping("/statusPayment/{paymentId}")
     public ResponseEntity<ResponseDto> statusPayment(@PathVariable("paymentId") int id) {
         try {
-            EWalletCharge statusPayment = paymentService.statusPayment(id);
+            PaymentEntity statusPayment = paymentService.statusPayment(id);
             return new ResponseEntity<>(new ResponseDto(200, "Successfully get status payment", statusPayment), HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e);

@@ -58,13 +58,13 @@ public class PaymentService {
         paymentRepository.updateStatusById(callbackXenditDTO.getStatus(), callbackXenditDTO.getExternal_id());
     }
 
-    public EWalletCharge statusPayment(int id) {
+    public PaymentEntity statusPayment(int id) {
         try {
             Xendit.Opt.setApiKey(xenditKey);
             PaymentEntity payment = paymentRepository.findById(id).get();
-            EWalletCharge statusPayment = EWalletCharge.getEWalletChargeStatus(payment.getId_xendit());
+            // EWalletCharge statusPayment = EWalletCharge.getEWalletChargeStatus(payment.getId_xendit());
 
-            return statusPayment;
+            return payment;
         } catch (XenditException e) {
             e.printStackTrace();
             return null;
