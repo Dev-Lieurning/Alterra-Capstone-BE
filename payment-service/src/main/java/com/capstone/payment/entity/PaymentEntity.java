@@ -18,7 +18,10 @@ public class PaymentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int id_reservation;
+    private String id_xendit;
     private String receipe;
     private String status;
+    @Transient
+    private Double amount;
 
 }

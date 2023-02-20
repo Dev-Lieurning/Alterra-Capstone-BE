@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestRoomDto<T> implements Serializable {
+public class RequestRoomDto<T,B> implements Serializable {
     private int id;
     private String name;
     private String type;
@@ -20,5 +20,6 @@ public class RequestRoomDto<T> implements Serializable {
     private String location;
     private int max_guest;
     private String description;
-    private List<T> files = new ArrayList<>();
+    private List<T> files;
+//    private List<B> deleteFiles = new ArrayList<>();
 }

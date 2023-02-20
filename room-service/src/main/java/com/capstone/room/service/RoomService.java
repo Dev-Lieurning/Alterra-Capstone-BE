@@ -14,9 +14,6 @@ import com.capstone.room.repository.RoomImageRepository;
 import com.capstone.room.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,6 +85,7 @@ public class RoomService {
 
     public ResponseMessage deleteRoom(int id){
         roomRepository.deleteById(id);
+        roomImageRepository.deleteByIdRoom(id);
         return new ResponseMessage("Room Deleted!!");
     }
 

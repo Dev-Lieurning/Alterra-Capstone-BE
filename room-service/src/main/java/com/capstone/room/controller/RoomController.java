@@ -63,8 +63,7 @@ public class RoomController {
 
             RoomEntity saveRoom = roomService.addRoom(room);
             ResponseRoom response;
-            if(requestRoom.getFiles().size() <  1) {
-
+            if(requestRoom.getFiles().equals(null)) {
                 response = ResponseRoom.builder()
                         .id(saveRoom.getId())
                         .name(saveRoom.getName())
