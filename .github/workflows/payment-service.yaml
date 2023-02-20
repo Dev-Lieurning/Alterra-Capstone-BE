@@ -57,9 +57,9 @@ jobs:
       - name: Docker
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.HOST_VPS }}
-          username: ${{ secrets.USER_VPS }}
-          password: ${{ secrets.PASSWORD_VPS }}
+          host: ${{ secrets.AWS_HOST4 }}
+          username: ${{ secrets.AWS_USERNAME }}
+          key: ${{ secrets.AWS_KEY }}
           port: ${{ secrets.AWS_PORT }}
           script: |
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/payment-service:latest
