@@ -65,7 +65,7 @@ public class PaymentService {
             // EWalletCharge statusPayment = EWalletCharge.getEWalletChargeStatus(payment.getId_xendit());
 
             return payment;
-        } catch (XenditException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
