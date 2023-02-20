@@ -89,6 +89,12 @@ public class RoomService {
         return new ResponseMessage("Room Deleted!!");
     }
 
+    public void deleteImage(List<Integer> id) {
+        for(int id_image : id) {
+            roomImageRepository.deleteById(id_image);
+        }
+    }
+
     public RoomImageEntity getImageByName(String fileName) {
         RoomImageEntity image = roomImageRepository.findByFileName(fileName);
         return image;

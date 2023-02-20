@@ -109,8 +109,18 @@ public class RoomController {
                                 .max_guest(requestRoom.getMax_guest())
                                 .description(requestRoom.getDescription())
                                 .build();
-            RoomEntity response = roomService.updateRoom(room);
-            return new ResponseEntity<>(new ResponseDto(200, "Succesfully update Room", response), HttpStatus.OK);
+            if(requestRoom.getDeleteFiles() != null) {
+                roomService.deleteImage(requestRoom.getDeleteFiles());
+            }
+
+            if(requestRoom.getFiles() != null) {
+                List<RoomImageEntity> saveImages = roomService.uploadFileToS3(requestRoom.getFiles(), requestRoom.getId());
+            }
+
+            RoomEntity updateRoom = roomService.updateRoom(room);
+            ResponseRoom response = roomService.getRoomById(requestRoom.getId());
+//            String response = "TEST";
+            return new ResponseEntity<>(new ResponseDto(200, "Successfully update Room", response), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseDto(403, "Failed update Room", new ArrayList<>()), HttpStatus.FORBIDDEN);
         }
