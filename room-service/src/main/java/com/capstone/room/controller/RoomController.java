@@ -50,6 +50,17 @@ public class RoomController {
         }
     }
 
+    @GetMapping(path = "/getRoomByLocation/{location}")
+    public ResponseEntity<ResponseDto> getRoomByLocation(@PathVariable("location") String location) {
+        try {
+            List<ResponseRoom> room =roomService.getRoomByLocation(location);
+            ResponseEntity<ResponseDto> response = new ResponseEntity<>(new ResponseDto(200, "Successfully get Data Room", room), HttpStatus.OK);
+            return response;
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ResponseDto(403, "Data no Exist!", new ArrayList<>()), HttpStatus.FORBIDDEN);
+        }
+    }
+
     @PostMapping("/addRoom")
     public ResponseEntity<ResponseDto> addRoom(@ModelAttribute RequestRoomDto requestRoom) {
         try {

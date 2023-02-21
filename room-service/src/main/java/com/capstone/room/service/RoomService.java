@@ -73,6 +73,25 @@ public class RoomService {
         return room;
     }
 
+    public List<ResponseRoom> getRoomByLocation(String location) {
+        List<ResponseRoom> responseRooms = new ArrayList<>();
+        List<RoomEntity> roomList = roomRepository.findByLocation(location);
+        for(RoomEntity room : roomList) {
+            responseRooms.add(ResponseRoom.builder()
+                    .id(room.getId())
+                    .name(room.getName())
+                    .type(room.getType())
+                    .price(room.getPrice())
+                    .location(room.getLocation())
+                    .max_guest(room.getMax_guest())
+                    .description(room.getDescription())
+                    .image(roomImageRepository.findByIdRoom(room.getId()))
+                    .build());
+        }
+
+        return responseRooms;
+    }
+
     public RoomEntity addRoom(RoomEntity room) {
         RoomEntity addRoom = roomRepository.save(room);
         return addRoom;
