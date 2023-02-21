@@ -130,7 +130,6 @@ public class RoomController {
 
             RoomEntity updateRoom = roomService.updateRoom(room);
             ResponseRoom response = roomService.getRoomById(requestRoom.getId());
-//            String response = "TEST";
             return new ResponseEntity<>(new ResponseDto(200, "Successfully update Room", response), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(new ResponseDto(403, "Failed update Room", new ArrayList<>()), HttpStatus.FORBIDDEN);
@@ -147,15 +146,15 @@ public class RoomController {
         }
     }
 
-    @GetMapping(path = "/file/{fileName}")
-    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("fileName") String fileName) {
-        RoomImageEntity file = roomService.getImageByName(fileName);
-        byte[] data = roomService.previewFile(fileName);
-        ByteArrayResource resource = new ByteArrayResource(data);
-        return ResponseEntity
-                .ok()
-                .contentLength(data.length)
-                .contentType(MediaType.valueOf(file.getType_data()))
-                .body(resource);
-    }
+//    @GetMapping(path = "/file/{fileName}")
+//    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable("fileName") String fileName) {
+//        RoomImageEntity file = roomService.getImageByName(fileName);
+//        byte[] data = roomService.previewFile(fileName);
+//        ByteArrayResource resource = new ByteArrayResource(data);
+//        return ResponseEntity
+//                .ok()
+//                .contentLength(data.length)
+//                .contentType(MediaType.valueOf(file.getType_data()))
+//                .body(resource);
+//    }
 }

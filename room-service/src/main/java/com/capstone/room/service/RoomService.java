@@ -11,9 +11,12 @@ import com.capstone.room.entity.ResponseRoom;
 import com.capstone.room.entity.RoomEntity;
 import com.capstone.room.entity.RoomImageEntity;
 import com.capstone.room.repository.RoomImageRepository;
+import com.capstone.room.repository.RoomRedisRepository;
 import com.capstone.room.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +35,9 @@ public class RoomService {
     @Autowired(required = false)
     RoomImageRepository roomImageRepository;
 
+    @Autowired(required = false)
+    RoomRedisRepository roomRedisRepository;
+
     @Autowired
     private AmazonS3 amazonS3;
 
@@ -39,9 +45,12 @@ public class RoomService {
     private String bucket;
     @Value("${regionAws}")
     private String region;
+
+    public static final String HASH_KEY = "Room";
+
     public List<ResponseRoom> getAllRooms() {
         List<ResponseRoom> responseRooms = new ArrayList<>();
-        List<RoomEntity> roomList = roomRepository.findAll();
+        List<RoomEntity> roomList = roomRedisRepository.findAll();
         for(RoomEntity room : roomList) {
             responseRooms.add(ResponseRoom.builder()
                             .id(room.getId())
@@ -59,7 +68,7 @@ public class RoomService {
     }
 
     public ResponseRoom getRoomById(Integer id) {
-        RoomEntity roomData = roomRepository.findById(id).get();
+        RoomEntity roomData = roomRedisRepository.findById(id);
         ResponseRoom room = ResponseRoom.builder()
                                 .id(roomData.getId())
                                 .name(roomData.getName())
@@ -93,17 +102,17 @@ public class RoomService {
     }
 
     public RoomEntity addRoom(RoomEntity room) {
-        RoomEntity addRoom = roomRepository.save(room);
+        RoomEntity addRoom = roomRedisRepository.save(room);
         return addRoom;
     }
 
     public RoomEntity updateRoom(RoomEntity room) {
-        RoomEntity updateRoom = roomRepository.save(room);
+        RoomEntity updateRoom = roomRedisRepository.update(room);
         return updateRoom;
     }
 
     public ResponseMessage deleteRoom(int id){
-        roomRepository.deleteById(id);
+        roomRedisRepository.deleteById(id);
         roomImageRepository.deleteByIdRoom(id);
         return new ResponseMessage("Room Deleted!!");
     }
@@ -147,16 +156,16 @@ public class RoomService {
 
     }
 
-    public byte[] previewFile(String fileName){
-        try {
-            S3Object s3Object = amazonS3.getObject(bucket, fileName);
-            S3ObjectInputStream inputStream = s3Object.getObjectContent();
-
-            byte[] data = IOUtils.toByteArray(inputStream);
-            return data;
-        } catch (IOException e){
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public byte[] previewFile(String fileName){
+//        try {
+//            S3Object s3Object = amazonS3.getObject(bucket, fileName);
+//            S3ObjectInputStream inputStream = s3Object.getObjectContent();
+//
+//            byte[] data = IOUtils.toByteArray(inputStream);
+//            return data;
+//        } catch (IOException e){
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 }
