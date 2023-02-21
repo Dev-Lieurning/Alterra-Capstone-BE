@@ -142,8 +142,6 @@ public class RoomService {
             }
             return response;
         } catch (IOException e) {
-            System.out.println("error wey");
-            System.out.println(e);
             return new ArrayList<>();
         }
 

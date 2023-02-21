@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-public class UserEntity implements UserDetails {
+public class UserEntity<T> implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +28,11 @@ public class UserEntity implements UserDetails {
     private String password;
     private String address;
     private String phone;
+    private String image;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Transient
+    private List<T> files;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
