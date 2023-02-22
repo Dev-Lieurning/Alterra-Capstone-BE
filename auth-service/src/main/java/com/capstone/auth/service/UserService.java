@@ -7,8 +7,10 @@ import com.capstone.auth.entity.ResponseMessage;
 import com.capstone.auth.entity.Role;
 import com.capstone.auth.entity.UserEntity;
 import com.capstone.auth.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     @Autowired(required = false)
@@ -31,6 +34,8 @@ public class UserService {
     private String bucket;
     @Value("${regionAws}")
     private String region;
+
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserEntity> getAllUsers() {
         List<UserEntity> users = userRepository.findAll();
@@ -59,6 +64,7 @@ public class UserService {
             user.setFiles(null);
         }
         user.setRole(Role.USER);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserEntity updUser = userRepository.save(user);
         return updUser;
     }
