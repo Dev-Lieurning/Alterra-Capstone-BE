@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/v1/**").permitAll()
+                .requestMatchers("").permitAll()
 //                .requestMatchers("/v1/addRoom").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()

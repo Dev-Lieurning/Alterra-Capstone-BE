@@ -20,13 +20,11 @@ public class RoomRedisRepository {
 
     @Cacheable(value = HASH_VALUE ,key = "#id")
     public RoomEntity findById(int id){
-        System.out.println("ga ke caching bre");
         return roomRepository.findById(id).get();
     }
 
     @Cacheable(value = HASH_VALUE)
     public List<RoomEntity> findAll(){
-        System.out.println("ini ga ke caching juga wey");
         return roomRepository.findAll();
     }
 
