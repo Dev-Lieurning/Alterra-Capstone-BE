@@ -54,7 +54,6 @@ public class ReservationService {
     public List<ReservationUser> getReservationByUserId(int id) {
         List<ReservationEntity> reservationList = reservationRepository.findReservationByUserId(id);
         List<ReservationUser> reservationUsers = new ArrayList<>();
-//        UserEntity user = restTemplate.getForObject("http://api.capstone-meeting.online/user/getUser/" + id ,UserEntity.class);
         UserEntity user = userRepository.getById(id);
         ModelMapper modelMapper = new ModelMapper();
         for(ReservationEntity reservation : reservationList) {

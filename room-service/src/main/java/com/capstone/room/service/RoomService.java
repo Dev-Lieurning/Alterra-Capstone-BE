@@ -3,9 +3,6 @@ package com.capstone.room.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
-import com.amazonaws.util.IOUtils;
 import com.capstone.room.entity.ResponseMessage;
 import com.capstone.room.entity.ResponseRoom;
 import com.capstone.room.entity.RoomEntity;
@@ -15,8 +12,6 @@ import com.capstone.room.repository.RoomRedisRepository;
 import com.capstone.room.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,8 +40,6 @@ public class RoomService {
     private String bucket;
     @Value("${regionAws}")
     private String region;
-
-    public static final String HASH_KEY = "Room";
 
     public List<ResponseRoom> getAllRooms() {
         List<ResponseRoom> responseRooms = new ArrayList<>();

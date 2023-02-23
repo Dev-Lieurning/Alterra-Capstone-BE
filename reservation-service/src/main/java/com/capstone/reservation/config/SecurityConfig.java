@@ -26,7 +26,6 @@ public class SecurityConfig {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("").permitAll()
-//                .requestMatchers("/v1/addRoom").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and()

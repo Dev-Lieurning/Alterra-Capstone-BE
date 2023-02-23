@@ -62,9 +62,9 @@ public class UserService {
             List<String> linkS3 = uploadFileToS3(user.getFiles());
             user.setImage(linkS3.get(0));
             user.setFiles(null);
-        }
+        };
+        if(user.getPassword() != null) user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         UserEntity updUser = userRepository.save(user);
         return updUser;
     }
