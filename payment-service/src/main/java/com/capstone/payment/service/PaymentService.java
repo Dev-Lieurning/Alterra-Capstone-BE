@@ -38,6 +38,7 @@ public class PaymentService {
                 Map<String, Object> params = new HashMap<>();
                 params.put("external_id", ""+paymentSave.getId());
                 params.put("amount", payment.getAmount());
+                params.put("success_redirect_url", "https://capstone-meeting.online/cart");
 
 
                 Invoice invoice = Invoice.create(params);
