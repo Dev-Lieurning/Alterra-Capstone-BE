@@ -110,6 +110,7 @@ public class RoomController {
 
     @PutMapping("/updateRoom")
     public ResponseEntity<ResponseDto> updateRoom (@ModelAttribute RequestRoomDto requestRoom) {
+        System.out.println("masuk sini gak sih?");
         try {
             RoomEntity room = RoomEntity.builder()
                                 .id(requestRoom.getId())
