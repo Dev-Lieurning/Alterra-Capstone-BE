@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("").permitAll()
+                .requestMatchers("/v1/xendit").permitAll()
 //                .requestMatchers("/v1/addRoom").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
